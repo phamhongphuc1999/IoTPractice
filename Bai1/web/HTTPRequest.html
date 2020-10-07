@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="test"></p>
+</body>
+<script>
+    $(document).ready(() => {
+        $.ajax({
+            url: "https://cors-anywhere.herokuapp.com/http://203.171.20.94:8012/api/AccessControl/GetUserInfor",
+            method: "POST",
+            dataType: "json",
+            data: JSON.stringify({
+                "deviceId": "8a0fc66a61a959f6",
+                "qrCodeId": "a652d57094b7590b0dea115b156c07098abdea87",
+                "qrCodeValue": "P22498244182551944"
+            }),
+            headers: {
+                "x-requested-with": "xhr",
+                "Content-Type": "application/json"
+            }
+        })
+            .done((data) => {
+                console.log(data);
+                $("#test").append("<b>"+JSON.stringify(data)+"</b>");
+            })
+    })
+</script>
+
+</html>
