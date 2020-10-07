@@ -16,12 +16,25 @@ namespace SubscribeClient
             //add event
             client.MqttMsgSubscribed += Client_MqttMsgSubscribed;
             client.MqttMsgPublishReceived += Client_MqttMsgPublishReceived;
+            client.ConnectionClosed += Client_ConnectionClosed;
 
             ushort msgId = client.Subscribe(new string[] { "/my_test" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         }
 
+        private static void Client_ConnectionClosed(object sender, EventArgs e)
+        {
+            
+        }
+
         private static void Client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
+            string message = Encoding.UTF8.GetString(e.Message);
+            if(message == "")
+            {
+                MqttClient client = sender as MqttClient;
+                Console.WriteLine("Client is disconnected");
+                client.Disconnect();
+            }
             Console.WriteLine("Received = " + Encoding.UTF8.GetString(e.Message) + " on topic " + e.Topic);
         }
 

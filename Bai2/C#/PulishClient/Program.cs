@@ -12,18 +12,32 @@ namespace PulishClient
             Console.WriteLine("Pulished Client\n");
             MqttClient client = new MqttClient("broker.hivemq.com");
             byte code = client.Connect(Guid.NewGuid().ToString());
+
+            //add event
             client.MqttMsgPublished += Client_MqttMsgPublished;
-            ushort msgId = client.Publish("/my_test", Encoding.UTF8.GetBytes(@"{
-                ""name"": ""Pham Hong Phuc"",
-                ""age"": 20,
-                ""address"": ""Hai Duong""
-            }"), 
+            client.ConnectionClosed += Client_ConnectionClosed;
+
+            while (true)
+            {
+                string message = Console.ReadLine();
+                if (message == "")
+                {
+                    client.Publish("/my_test", Encoding.UTF8.GetBytes(""), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+                    client.Disconnect();
+                    break;
+                }
+                ushort msgId = client.Publish("/my_test", Encoding.UTF8.GetBytes(message),
              MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+            }
+        }
+
+        private static void Client_ConnectionClosed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Client is disconnected");
         }
 
         private static void Client_MqttMsgPublished(object sender, MqttMsgPublishedEventArgs e)
         {
-            MqttClient client = sender as MqttClient;
             Console.WriteLine("MessageId = " + e.MessageId + " Published = " + e.IsPublished);
         }
     }
