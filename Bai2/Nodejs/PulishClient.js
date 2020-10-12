@@ -1,6 +1,6 @@
 var mqtt = require('mqtt');
 
-var client  = mqtt.connect('mqtt://broker.mqttdashboard.com',{
+var client  = mqtt.connect('tcp://broker.hivemq.com:1883',{
     protocolId: 'MQIsdp',
     protocolVersion: 3
 });
