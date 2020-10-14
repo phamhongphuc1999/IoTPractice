@@ -3,3 +3,4 @@
 ### tài liệu tham khảo
 - https://www.tinkercad.com/learn/circuits
 - https://www.hivemq.com/mqtt-client-library-encyclopedia/
+- https://www.rabbitmq.com/#getstarted
