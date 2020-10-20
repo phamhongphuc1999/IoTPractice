@@ -3,10 +3,6 @@ obj/
 bin/
 .vs/
 
-#visual code
-.vscode/
-.pio
-
 #JetBrainIDE
 .idea/
 
