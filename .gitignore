@@ -1,5 +1,17 @@
+#Visual studio
 obj/
 bin/
 .vs/
+
+#visual code
+.vscode/
+.pio
+
+#JetBrainIDE
 .idea/
+
+#js
 node_modules/
+
+#other
+idea.txt

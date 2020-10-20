@@ -1,5 +1,7 @@
+int pin = 8;
+
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(pin, OUTPUT);
 
   Serial.begin(9600);
 }
