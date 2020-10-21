@@ -1,21 +1,26 @@
 #include <Arduino.h>
 
-int led = 13;
+int LED = 2;
 
 void setup() {
   Serial.begin(115200); 
-  pinMode(led, OUTPUT);
-  while(!Serial); 
-  Serial.printf("Led is albe to controlle");
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.printf("%s", "Led is albe to controlle\n");
+  Serial.println(LED_BUILTIN);
 }
 
 void loop() {
-  if (Serial.available() > 0){
-    delay(10);
+  delay(1000);
+  if(Serial.available() > 0){
     char bit = Serial.read();
-    Serial.println(bit);
-  }
-  else{
-    Serial.printf("error");
+    if(bit == '0'){
+      digitalWrite(LED_BUILTIN, LOW);
+    }
+    else if (bit == '1')
+    {
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+    int test = digitalRead(LED_BUILTIN);
+    Serial.println(test);
   }
 }
