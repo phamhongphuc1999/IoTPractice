@@ -8,6 +8,3 @@ bin/
 
 #js
 node_modules/
-
-#other
-idea.txt
