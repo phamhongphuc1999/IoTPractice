@@ -2,7 +2,7 @@
 
 void setup()
 {
-WiFi.softAP("31/8/2017");
+WiFi.softAP("phamhongphuc", "123456789");
 Serial.begin(115200);
 
 }
