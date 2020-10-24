@@ -3,7 +3,7 @@
 
 SocketIOClient client;
 
-const char* ssid = "Hacker"; 
+const char* ssid = "Hacker";
 const char* password = "tuanhiep99";
 
 char* host = "192.168.1.34";
@@ -38,7 +38,6 @@ void setup() {
 void loop() {
   if(millis() - previousMillis > interval){
     previousMillis = millis();
-    String* keys = new String[2]{"1", "2"};
     SendMessage(&client, "atime", new String[2]{"1", "2"}, new String[2]{"phuc", "pham"}, 2);
   }
 
