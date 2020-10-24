@@ -12,8 +12,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "d:/Documents/IoT/IoTHomework/VisualCode/WifiAccessPoint/.pio/build/nodemcuv2/firmware.elf",
-            "toolchainBinDir": "C:/Users/phamh/.platformio/packages/toolchain-xtensa/bin",
+            "executable": "/home/phuc/Documents/IoTHomework/ESP8266/VisualCode/WifiAccessPoint/.pio/build/nodemcuv2/firmware.elf",
+            "toolchainBinDir": "/home/phuc/.platformio/packages/toolchain-xtensa/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -24,8 +24,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "d:/Documents/IoT/IoTHomework/VisualCode/WifiAccessPoint/.pio/build/nodemcuv2/firmware.elf",
-            "toolchainBinDir": "C:/Users/phamh/.platformio/packages/toolchain-xtensa/bin",
+            "executable": "/home/phuc/Documents/IoTHomework/ESP8266/VisualCode/WifiAccessPoint/.pio/build/nodemcuv2/firmware.elf",
+            "toolchainBinDir": "/home/phuc/.platformio/packages/toolchain-xtensa/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]

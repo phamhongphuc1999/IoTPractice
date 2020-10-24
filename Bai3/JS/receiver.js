@@ -18,7 +18,13 @@ amqp.connect('amqp://localhost', function(error0, connection) {
         console.log(" [*] Waiting for messages in %s.", queue);
 
         channel.consume(queue, function(msg) {
-            console.log(" [x] Received %s", msg.content.toString());
+            var jsonData = JSON.parse(msg.content.toString());
+            console.log(`id: ${jsonData['id']}`);
+            console.log(`packet_no: ${jsonData['packet_no']}`);
+            console.log(`temperature: ${jsonData['temperature']}`);
+            console.log(`humidity: ${jsonData['humidity']}`);
+            console.log(`tds: ${jsonData['tds']}`);
+            console.log(`pH: ${jsonData['pH']}`);
         }, {
             noAck: true
         });
