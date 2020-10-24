@@ -11,7 +11,14 @@ amqp.connect('amqp://localhost', function(error0, connection) {
         throw error1;
       }
       var queue = 'hello';
-      var msg = 'Hello world';
+      var msg = {
+        "id": 11,
+        "packet_no": 100,
+        "temperature": 30,
+        "humidity": 50,
+        "tds": 1100,
+        "pH": 50
+      }
       channel.assertQueue(queue, {
         durable: false
       });
