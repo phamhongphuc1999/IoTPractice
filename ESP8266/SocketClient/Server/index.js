@@ -15,34 +15,30 @@ function ParseJson(jsondata) {
     }
 }
 
-//send data to ESP8266
-function sendTime(){
-    var json = {
-        a: "123",
-        b: "321"
-    }
-    io.sockets.emit('atime', json);
-}
-
 io.on('connection', function(socket){
-    console.log('Connected');
-    socket.emit('welcome', {
-        message: 'Connected !!!!'
-    });
-
+    //esp8266 connect to server by RID connection
     socket.on('connection', function(message) {
+        console.log('Connected');
+        socket.emit('welcome', {
+            message: 'Connected !!!!'
+        });
         console.log(message);
     });
 
-    //get json data from ESP8266
-    socket.on('atime', function(data) {
-        sendTime();
-        console.log(data["1"]);
-        console.log(data['2']);
+    //get json data from ESP8266 by RID esp8266
+    socket.on('esp8266', function(data) {
+        socket.emit('esp8266', {
+            id: '123',
+            name: 'phuc'
+        })
+        console.log(data)
     });
 
-    socket.on('arduino', function (data) {
-        io.sockets.emit('arduino', { message: 'R0' });
+    //get json data from ESP32 by RID esp32
+    socket.on('esp32', function (data) {
+        io.sockets.emit('esp32', { 
+            message: 'R0' 
+        });
         console.log(data);
     });
 })

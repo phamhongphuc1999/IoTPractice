@@ -7,14 +7,22 @@ String CreateJson(String* keys, String* values, int count){
         result += "\"" + keys[i] + "\":\"" + values[i] + "\",";
     }
     result += "\"" + keys[count - 1] + "\":\"" + values[count - 1] + "\"}";
-    Serial.println(result);
     return result;
 }
 
 IPAddress ConnectWifi(const char* ssid, const char* password){
     WiFi.begin(ssid, password);
-
     while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    return WiFi.localIP();
+}
+
+IPAddress ConnectWifi(const char* ssid){
+    WiFi.begin(ssid);
+    while (WiFi.status() != WL_CONNECTED)
+    {
         delay(500);
         Serial.print(".");
     }

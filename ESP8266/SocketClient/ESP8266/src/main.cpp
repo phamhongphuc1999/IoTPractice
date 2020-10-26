@@ -3,10 +3,14 @@
 
 SocketIOClient client;
 
-const char* ssid = "Hacker";
-const char* password = "tuanhiep99";
+// const char* ssid = "Hacker"; 
+// const char* password = "tuanhiep99";
+//const char* ssid = "WIFI-HUST";
 
-char* host = "192.168.1.34";
+const char* ssid = "ppp";
+const char* password = "12345678";
+
+char* host = "192.168.43.35";
 int port = 3484;
 
 unsigned long previousMillis = 0;
@@ -20,7 +24,6 @@ void setup() {
   delay(1000);
 
   Serial.printf("connect to network: %s\n", ssid);
-
   IPAddress ip = ConnectWifi(ssid, password);
 
   Serial.println();
@@ -38,12 +41,14 @@ void setup() {
 void loop() {
   if(millis() - previousMillis > interval){
     previousMillis = millis();
-    SendMessage(&client, "atime", new String[2]{"1", "2"}, new String[2]{"phuc", "pham"}, 2);
+    SendMessage(&client, "esp8266", 
+          new String[2]{"temperature", "humidity"}, 
+          new String[2]{"20", "30"}, 
+          2);
   }
 
   if(client.monitor()){
-    Serial.println(RID);
-    Serial.println(Rfull);
+    Serial.println("Receive from server in RID: " + RID + ", Message: " + Rfull);
   }
 
   if(!client.connected()){

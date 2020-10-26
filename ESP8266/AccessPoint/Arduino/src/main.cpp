@@ -2,8 +2,8 @@
 const char* ssid = "Stationssid";   //agin ssid
 const char* password = "1234567890";//agin password
 const char* host="192.168.4.1";   // hosted host
-const char* apssid = "APssid";    // I will broadcast the ssid name of the network
-const char* appassword = "1234567890"; // I will broadcast the encryption of the network
+const char* apssid = "phuc";    // I will broadcast the ssid name of the network
+const char* appassword = "123456789"; // I will broadcast the encryption of the network
 String cgv; // my variable to read the data from the client
 int k;
 const int port=5001; // port i am connected to

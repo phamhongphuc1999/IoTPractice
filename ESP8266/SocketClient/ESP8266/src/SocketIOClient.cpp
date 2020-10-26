@@ -532,7 +532,6 @@ void SocketIOClient::sendMessage(String message)
     }
     dataSend += mask;
     dataSend += masked;
-
     client.print(dataSend);
 }
 
