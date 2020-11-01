@@ -4,7 +4,7 @@
 
 const char *ssid = "Hacker";
 const char *password = "tuanhiep99";
-const char *mqtt_broker = "broker.emqx.io";
+const char *mqtt_broker = "broker.hivemq.com";
 const int mqtt_port = 1883;
 
 WiFiClient espClient;
@@ -22,13 +22,14 @@ void callback(char *topic, byte *payload, unsigned int length) {
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Connecting to WiFi..");
+    delay(1000);
+    Serial.print(".");
   }
-  Serial.println("Connected to the WiFi network");
+  Serial.print("Connected to the WiFi network: ");
+  Serial.println(ssid);
   client.setServer(mqtt_broker, mqtt_port);
   client.setCallback(callback);
   while (!client.connected()) {
@@ -37,12 +38,12 @@ void setup() {
       Serial.println("Public emqx mqtt broker connected");
     } else {
       Serial.print("failed with state ");
-      Serial.print(client.state());
+      Serial.println(client.state());
       delay(2000);
     }
   }
-  client.publish("esp8266/test", "hello emqx");
-  client.subscribe("esp8266/test");
+  client.publish("esp8266", "Hello");
+  //client.subscribe("esp8266");
 }
 
 void loop() {

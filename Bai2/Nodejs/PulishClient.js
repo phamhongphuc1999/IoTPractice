@@ -5,7 +5,7 @@ var client  = mqtt.connect('tcp://broker.hivemq.com:1883',{
     protocolVersion: 3
 });
 
-client.publish("/my_test", JSON.stringify({
+client.publish("esp8266", JSON.stringify({
     "name": "Pham Hong Phuc",
     "age": 20
 }), {qos: 2, retain: true}, (error, packet) =>{

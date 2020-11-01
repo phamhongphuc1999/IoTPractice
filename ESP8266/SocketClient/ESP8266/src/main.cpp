@@ -1,16 +1,11 @@
-#include <config.h>
 #include <WifiConnecter.h>
 
 SocketIOClient client;
 
-// const char* ssid = "Hacker"; 
-// const char* password = "tuanhiep99";
-//const char* ssid = "WIFI-HUST";
+const char* ssid = "Hacker"; 
+const char* password = "tuanhiep99";
 
-const char* ssid = "ppp";
-const char* password = "12345678";
-
-char* host = "192.168.43.35";
+char* host = "192.168.1.34";
 int port = 3484;
 
 unsigned long previousMillis = 0;
@@ -20,7 +15,7 @@ extern String RID;
 extern String Rfull;
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(1000);
 
   Serial.printf("connect to network: %s\n", ssid);

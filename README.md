@@ -1,5 +1,12 @@
 ### Bài tập tuần môn Iot và ứng dụng
 ### xem yêu cầu chi tiết của từng bài tập tuần tại [đây](./iot.pptx)
+### lưu ý
+- nếu dùng ubuntu mà bị lỗi can not open /dev/ttyUSB0 thì có thể mở terminal chạy các câu lệnh sau
+
+	sudo su
+	cd /dev
+	chown username ttyUSB0
+[link](https://github.com/esp8266/source-code-examples/issues/26)
 ### tài liệu tham khảo
 - [ArduinoMQTT](https://github.com/monstrenyatko/ArduinoMqtt)
 - https://www.tinkercad.com/learn/circuits
