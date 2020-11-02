@@ -1,12 +1,14 @@
 ### Bài tập tuần môn Iot và ứng dụng
 ### xem yêu cầu chi tiết của từng bài tập tuần tại [đây](./iot.pptx)
 ### lưu ý
-- nếu dùng ubuntu mà bị lỗi can not open /dev/ttyUSB0 thì có thể mở terminal chạy các câu lệnh sau
-
+1) Lỗi can not open /dev/ttyUSB0 trên ubuntu
+###### chạy lần lượt các câu lệnh sau
 	sudo su
 	cd /dev
 	chown username ttyUSB0
-[link](https://github.com/esp8266/source-code-examples/issues/26)
+[link](https://github.com/esp8266/source-code-examples/issues/26) <br>
+2) Lỗi Serial.print() không hoạt động trên ubuntu
+- trước khi print nên đặt delay(1000) và chỉnh monitor_speed=9600
 ### tài liệu tham khảo
 - [ArduinoMQTT](https://github.com/monstrenyatko/ArduinoMqtt)
 - https://www.tinkercad.com/learn/circuits
