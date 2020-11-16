@@ -1,12 +1,14 @@
 #include <Arduino.h>
 
+int pin = 2;
+
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(pin, OUTPUT);
 }
 
 void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(pin, HIGH);
   delay(1000);
-  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(pin, LOW);
   delay(2000);
 }
