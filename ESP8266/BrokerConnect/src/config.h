@@ -1,6 +1,6 @@
 //wifi
-const char *ssid = "Hacker";
-const char *password = "tuanhiep99";
+const char *ssid = "iPhone";
+const char *password = "999999999";
 
 //broker
 const char *mqtt_broker = "broker.emqx.io";
@@ -13,3 +13,7 @@ bool isSensorOn = false;
 //led
 const int LED_PIN1 = 5;
 const int LED_PIN2 = 16;
+
+//demo
+const String* home1 = new String[1]{"01"};
+const String* home2 = new String[2]{"02", "11"};
