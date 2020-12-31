@@ -15,5 +15,5 @@ const int LED_PIN1 = 5;
 const int LED_PIN2 = 16;
 
 //demo
-const String* home1 = new String[1]{"01"};
-const String* home2 = new String[2]{"02", "11"};
+const String* esp1 = new String[1]{"01"};
+const String* esp2 = new String[2]{"02", "11"};

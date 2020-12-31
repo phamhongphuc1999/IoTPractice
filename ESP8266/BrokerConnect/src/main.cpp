@@ -12,59 +12,82 @@ int status = WL_IDLE_STATUS;
 float humidity = 0, temperature = 0;
 bool statusSensor = false;
 int count = 0;
-String homeId = "";
+String* head = new String[4]{"espID", "deviceID", "status", "data"};
 
 DHT dht(DHTPIN, DHTTYPE);
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-bool CheckID(String homeId, String deviceId){
-    if(homeId == "1"){
-      int index = home1->indexOf(deviceId);
-      return (index == -1);
-    }
-    else if(homeId == "2"){
-      int index = home2->indexOf(deviceId);
-      return (index == -1);
-    }
+bool CheckID(String espId, String deviceId){
+  int index = -1;
+  if(espId == "1") index = esp1->indexOf(deviceId);
+  else if(espId == "2") index = esp2->indexOf(deviceId);
+  return (index > -1);
 }
 
-char* GetAllDeviceStatus(String homeId){
-  if(homeId == "1"){
-    int status = digitalRead(LED_PIN1);
-    String result = "{";
-    result += "\"homeID\":\"" + homeId + "\",";
-    result += "\"esp\":[{\"espID\": \"1\","
+bool ValidMessage(char* message){
+  int count = 0, index = 0;
+  while(message[index] != '\0'){
+    if(message[index] == '.') count++;
+    if(count > 2) return false;
+    index++;
   }
-  else if(homeId == "2"){
-    int status = digitalRead(LED_PIN2);
-  }
+  return (count == 2);
+}
+
+String GetEsp1Status(){
+  int status = digitalRead(LED_PIN1);
+  String* h = new String[3]{"deviceID", "type", "status"};
+  String* body;
+  if(status == 0) body = new String[3]{"01", "light", "0"};
+  else body = new String[3]{"01", "light", "1"};
+  String result = "{\"espID\":\"1\",\"device\":[";
+  result += CreateJson(h, body, 3) + "]}";
+  return result;
+}
+
+String GetEsp2Status(){
+  int status = digitalRead(LED_PIN2);
+  String* h = new String[3]{"deviceID", "type", "status"};
+  String* body;
+  if(status == 0) body = new String[3]{"02", "light", "0"};
+  else body = new String[3]{"02", "light", "1"};
+  String result = "{\"espID\":\"2\",\"device\":[";
+  result += CreateJson(h, body, 3) + "]}";
+  return result;
+}
+
+String GetAllStatus(){
+  String result = "{\"esp\":[";
+  result += GetEsp1Status() + ",";
+  result += GetEsp2Status() + "]}";
+  return result;
 }
 
 void lightSwitchController(){
   if(Serial.available()){
     char status = Serial.read();
     Serial.println(status);
+    String* body;
     if(status == '1') {
       digitalWrite(LED_PIN1, HIGH);
-      char* payload = CreateJson("1", "1", "01", "true", CreateJson(new String[1]{"on"}, new String[1]{"true"}, 1));
-      client.publish("lightchanged", payload);
+      body = new String[4]{"1", "01", "true", CreateJson(new String[1]{"on"}, new String[1]{"true"}, 1)};
     }
     else if(status == '0'){
       digitalWrite(LED_PIN1, LOW);
-      char* payload = CreateJson("1", "1", "01", "true", CreateJson(new String[1]{"on"}, new String[1]{"false"}, 1));
-      client.publish("lightchanged", payload);
+      body = new String[4]{"1", "01", "true", CreateJson(new String[1]{"on"}, new String[1]{"false"}, 1)};
     }
     else if(status == '2'){
       digitalWrite(LED_PIN2, LOW);
-      char* payload = CreateJson("1", "1", "02", "true", CreateJson(new String[1]{"on"}, new String[1]{"true"}, 1));
-      client.publish("lightchanged", payload);
+      body = new String[4]{"1", "02", "true", CreateJson(new String[1]{"on"}, new String[1]{"false"}, 1)};
     }
     else if(status == '3'){
       digitalWrite(LED_PIN2, HIGH);
-      char* payload = CreateJson("1", "1", "02", "true", CreateJson(new String[1]{"on"}, new String[1]{"false"}, 1));
-      client.publish("lightchanged", payload);
+      body = new String[4]{"1", "02", "true", CreateJson(new String[1]{"on"}, new String[1]{"true"}, 1)};
     }
+    bool* isString = new bool[4]{true, true, true, false};
+    String payload = CreateJson(head, body, isString, 4);
+    client.publish("lightchanged", payload.c_str());
   }
 }
 
@@ -87,56 +110,56 @@ bool measureHumidityAdTemperature(float* humidity, float* temperature){
 }
 
 void light_callback(String deviceId, String status){
-  int control = (char)status[0] - '0';
-  bool check = false;
+  int control = (char)status[0] - '0', currentStatus = 0;
   if(deviceId == "01"){
       digitalWrite(LED_PIN1, control);
-      int status = digitalRead(LED_PIN1);
-      check = (status == control);
+      currentStatus = digitalRead(LED_PIN1);
     }
     else if(deviceId == "02"){
       digitalWrite(LED_PIN2, control);
-      int status = digitalRead(LED_PIN2);
-      check = (status == control);
+      currentStatus = digitalRead(LED_PIN2);
     }
-    char* payload;
-    if(check) payload = CreateJson("1", "1", deviceId, "true", CreateJson(new String[1]{"status"}, new String[1]{"1"}, 1));
-    else payload = CreateJson("1", "1", deviceId, "true", CreateJson(new String[1]{"status"}, new String[1]{"0"}, 1));
-    client.publish("returnresult", payload);
-    Serial.println();
-    Serial.println("-----------------------");
+    String* body;
+    if(currentStatus == control) body = new String[4]{"1", deviceId, "true", CreateJson(new String[1]{"status"}, new String[1]{"1"}, 1)};
+    else body = new String[4]{"1", deviceId, "true", CreateJson(new String[1]{"status"}, new String[1]{"1"}, 1)};
+    bool* isString = new bool[4]{true, true, true, false};
+    String payload = CreateJson(head, body, isString, 4);
+    client.publish("returnresult", payload.c_str());
+    Serial.println("\n-----------------------");
 }
 
 void controldevice_callback(byte* payload){
   String* result = SplitString((char*)payload);
-  if(!CheckID(result[0], result[2])){
-      char* payload = CreateJson(result[0], result[1], result[3], "false", CreateJson(new String[1]{"reason"}, new String[1]{"error accountId or error deviceId"}, 1));
-      client.publish("returnresult", payload);
+  if(!CheckID(result[0], result[1])){
+    String* body = new String[4]{result[0], result[1], "false", CreateJson(new String[1]{"reason"}, new String[1]{"error accountId or error deviceId"}, 1)};
+    bool* isString = new bool[4]{true, true, true, false};
+    String payload = CreateJson(head, body, isString, 4);
+    client.publish("returnresult", payload.c_str());
   }
-  homeId = result[0];
-  if(result[2][0] == '0') light_callback(result[2], result[3]);
-  else client.publish("returnresult", CreateJson(new String[1]{"error"}, new String[1]{"1"}, 1));
+  else if(result[1][0] == '0') light_callback(result[1], result[2]);
+  else client.publish("returnresult", CreateJson(new String[1]{"error"}, new String[1]{"1"}, 1).c_str());
 }
 
 void getdevicestatus_callback(byte* payload){
-  String* result = SplitString((char*)payload);
-  if(!CheckID(result[0], result[2])){
-      char* payload = CreateJson(result[0], result[1], result[3], "false", CreateJson(new String[1]{"reason"}, new String[1]{"error accountId or error deviceId"}, 1));
-      client.publish("returnresult", payload);
-  }
-  homeId = result[0];
-  client.publish("on_online", GetAllDeviceStatus(homeId));
+  client.publish("on_online", GetAllStatus().c_str());
 }
 
 void callback(char *topic, byte *payload, unsigned int length) {
     Serial.print("Message arrived in topic: ");
     Serial.println(topic);
-    Serial.println("Message: ");
+    Serial.print("Message: ");
     for (unsigned int i = 0; i < length; i++) {
         Serial.print((char) payload[i]);
     }
-    if (strcmp(topic, "controldevice") == 0) controldevice_callback(payload);
-    else if(strcmp(topic, "getdevicestatus") == 0) getdevicestatus_callback(payload);
+    if(ValidMessage((char*)payload)){
+      if (strcmp(topic, "controldevice") == 0) controldevice_callback(payload);
+      else if(strcmp(topic, "getdevicestatus") == 0) getdevicestatus_callback(payload);
+    }
+    else {
+      String* head = new String[2]{"status", "reason"};
+      String* body = new String[2]{"false", "payload error"};
+      client.publish("returnresult", CreateJson(head, body, 2).c_str());
+    }
 }
 
 void connectBroker(){
@@ -190,10 +213,12 @@ void loop() {
   }
   lightSwitchController();
   statusSensor = measureHumidityAdTemperature(&humidity, &temperature);
-  if(statusSensor && homeId == "2"){
-    char* result = CreateJson("2", "1", "11", "true", CreateJson(new String[2]{"humidity", "temperature"}, new float[2]{humidity, temperature}, 2));
+  if(statusSensor){
+    String* body = new String[4]{"1", "11", "true", CreateJson(new String[2]{"humidity", "temperature"}, new float[2]{humidity, temperature}, 2)};
+    bool* isString = new bool[4]{true, true, true, false};
+    String result = CreateJson(head, body, isString, 4);
     Serial.println(result);
-    client.publish("sensorinformation", result);
+    client.publish("sensorinformation", result.c_str());
   }
   client.loop();
 }
